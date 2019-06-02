@@ -1,0 +1,174 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/layout">
+<body>
+<div  layout:fragment="content" class="wrap">
+        <!--<input type="hidden" id="_csrf" name="_csrf" th:value="${_csrf.token}" hidden />
+        <input type="hidden" id="_csrf_header" name="_csrf_header" th:value="${_csrf.headerName}" hidden />-->
+        <div class="ctn-tt-area">
+            <h2><span>핫딜 모아모아</span></h2>
+            <div class="btn-area">
+                <a href="javascript:void(0);" class="btn active"><i class="i-edit"></i>알림 설정</a>
+            </div>
+        </div>
+        <div class="ctn-area" id="div_List">
+            <div class="ctn-filter">
+                <ul>
+                    <li v-for="(category, category_index) in header_categorys" :class="{ selected : category.selected }">
+                        <a @click="selectCategory(category,category_index)">
+                            <span>{{category.text}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+            <div class="ruri-list" v-if="header_categorys[0].selected || header_categorys[1].selected">
+                <ul >
+                    <li class="ongoing" v-for="item in header_categorys[1].data">
+                        <div class="ruri-list-item">
+                            <h3 class="ruri-title">
+                                <span>{{item.site}}</span><a v-bind:href="item.url" target="_blank">{{item.subject}}</a>
+                            </h3>
+                            <!--<div class="prj-btns">
+                                <a href="javascript:void(0);" class="link new meeting-log-on new"><i class="i-users2"></i> <span>15</span></a>
+                                <a href="javascript:void(0);" class="delete"><i class="i-trash-2"></i></a>
+                            </div>-->
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="ppo-list" v-if="header_categorys[0].selected || header_categorys[2].selected">
+                <ul >
+                    <li class="ongoing" v-for="item in header_categorys[2].data">
+                        <div class="ppo-list-item">
+                            <h3 class="ppo-title">
+                                <span>{{item.site}}</span><a v-bind:href="item.url" target="_blank">{{item.subject}}</a>
+                            </h3>
+                            <!--<div class="prj-btns">
+                                <a href="javascript:void(0);" class="link new meeting-log-on new"><i class="i-users2"></i> <span>15</span></a>
+                                <a href="javascript:void(0);" class="delete"><i class="i-trash-2"></i></a>
+                            </div>-->
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+            </div>
+        </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+    <!-- TUI JS -->
+    <script>
+        $(document).ready(function () {
+            init.initData();
+        })
+
+        // 초기화 작업
+        const init = {
+            initData : function(){
+                $.ajax({
+                    type: 'get',
+                    url: '/hotdeal/initData/',
+                    success: function(data) {
+                        console.log(data);
+                        ProjListApp.header_categorys[0].data = data.allList;
+                        ProjListApp.header_categorys[1].data = data.ruriList;
+                        ProjListApp.header_categorys[2].data = data.ppoList;
+
+
+                    },
+                    error: function(request,status,error) {
+                        alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+                    }
+                });
+            }
+        }
+
+        // proj 변수들 객체들
+       const projList = {}
+
+        //proj 메서드 객체들
+        const projMethods = {}
+
+        //상세보기 뷰 객체
+        const ProjListApp = new Vue({
+            el: '#div_List',
+            data: function() {
+                return{
+                    header_categorys:[
+                        {key:'allCnt',text:'전체',selected:true,cnt:null,data:[]},
+                        {key:'cnt1',text:'루리웹',selected:false,cnt:null,data:[]},
+                        {key:'cnt2',text:'뽐뿌',selected:false,cnt:null,data:[]}/*,
+                        {key:'cnt3',text:'제품생산',selected:false,cnt:null,data:[]},
+                        {key:'cnt4',text:'완료프로젝트',selected:false,cnt:null,data:[]},
+                        {key:'cnt5',text:'취소프로젝트',selected:false,cnt:null,data:[]},
+                        {key:'cnt6',text:'임시저장',selected:false,cnt:null,data:[]}*/
+                    ],
+                    categoryNum:0,
+                    projList : [],
+                    ruriList :[],
+                    ppoList :[],
+                    procStusCnt : {}
+                }
+            },
+            computed: {
+            },
+            methods:{
+                goDetail : function(hrefVal){
+                    location.href = hrefVal;
+                },
+                selectCategory:function(category,category_index){
+                    this.categoryNum = category_index;
+
+                    let param = category_index - 1
+                    let procStus = param.toString()
+                    let self = this
+
+                    this.header_categorys.map(function (data,i) {
+                        //중복클릭 방지
+                        if( (category_index == i && data.selected)){
+                            return data.selected = true
+                        }
+                        data.selected = false;
+                    })
+                    //클릭한 selected만 바뀜
+                    category.selected = true;
+                },
+                deleteProjInfo:function(item){
+                    if(confirm("임시저장된 항목을 삭제하시겠습니까?")){
+                        $.ajax({
+                            type: 'post',
+                            url: '/proj/delProjInfo',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: JSON.stringify(item),
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader($("#_csrf_header").val(), $("#_csrf").val());
+                            },
+                            success: function(data) {
+                            },
+                            error: function(request,status,error) {
+                                alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+                            }
+                        });
+                        location.reload();
+                    }else {
+                        return false;
+                    }
+                }
+            },
+            mounted: function(){
+                console.log('mounted~!')
+            },
+            created:function(){
+                console.log('created~!')
+            }
+        });
+
+    </script>
+</div>
+</body>
+</html>

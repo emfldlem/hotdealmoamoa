@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+    <title>Header</title>
+</head>
+
+<body>
+
+<div class="header" th:fragment="top">
+    <div class="header-wrap">
+        <h1></h1>
+        <div class="nav"></div>
+
+        <div class="info" sec:authorize="isAuthenticated()">
+            <div class="user-info">
+                <strong ><span th:text="${session.loginMbrNm}"></span></strong>
+                <!--<span>CY Global</span>-->
+                <a href="#" onclick="logout();"><i class="i-power2"></i>logout</a>
+            </div>
+        </div>
+        <div class="info" sec:authorize="isAnonymous()">
+            <span>로그인 안됌</span>
+        </div>
+    </div>
+
+
+    <!--<div class="info">
+        <a sec:authorize="authenticated"  th:href="@{/}" class="new-project">사용자 등록</a>
+        <div onclick="logout();" class="log-out"><i class="i-power2"></i><span>logout</span></div>
+    </div>-->
+    <script th:inline="javascript">
+        function logout() {
+            if(confirm('로그아웃 하시겠습니까?')) {       /*로그아웃 하시겠습니까?*/
+                document.location.href = "/logout";
+            }
+        }
+    </script>
+
+</div>
+
+</body>
+
+</html>
