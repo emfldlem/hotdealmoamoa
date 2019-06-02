@@ -6,7 +6,7 @@
         <!--<input type="hidden" id="_csrf" name="_csrf" th:value="${_csrf.token}" hidden />
         <input type="hidden" id="_csrf_header" name="_csrf_header" th:value="${_csrf.headerName}" hidden />-->
         <div class="ctn-tt-area">
-            <h2><span>핫딜 모아모아</span></h2>
+            <h2><span>너굴의 핫딜 모아모아</span></h2>
             <div class="btn-area">
                 <a href="javascript:void(0);" class="btn active"><i class="i-edit"></i>알림 설정</a>
             </div>
@@ -87,12 +87,6 @@
             }
         }
 
-        // proj 변수들 객체들
-       const projList = {}
-
-        //proj 메서드 객체들
-        const projMethods = {}
-
         //상세보기 뷰 객체
         const ProjListApp = new Vue({
             el: '#div_List',
@@ -101,25 +95,14 @@
                     header_categorys:[
                         {key:'allCnt',text:'전체',selected:true,cnt:null,data:[]},
                         {key:'cnt1',text:'루리웹',selected:false,cnt:null,data:[]},
-                        {key:'cnt2',text:'뽐뿌',selected:false,cnt:null,data:[]}/*,
-                        {key:'cnt3',text:'제품생산',selected:false,cnt:null,data:[]},
-                        {key:'cnt4',text:'완료프로젝트',selected:false,cnt:null,data:[]},
-                        {key:'cnt5',text:'취소프로젝트',selected:false,cnt:null,data:[]},
-                        {key:'cnt6',text:'임시저장',selected:false,cnt:null,data:[]}*/
+                        {key:'cnt2',text:'뽐뿌',selected:false,cnt:null,data:[]}
                     ],
-                    categoryNum:0,
-                    projList : [],
-                    ruriList :[],
-                    ppoList :[],
-                    procStusCnt : {}
+                    categoryNum:0
                 }
             },
             computed: {
             },
             methods:{
-                goDetail : function(hrefVal){
-                    location.href = hrefVal;
-                },
                 selectCategory:function(category,category_index){
                     this.categoryNum = category_index;
 
@@ -136,28 +119,6 @@
                     })
                     //클릭한 selected만 바뀜
                     category.selected = true;
-                },
-                deleteProjInfo:function(item){
-                    if(confirm("임시저장된 항목을 삭제하시겠습니까?")){
-                        $.ajax({
-                            type: 'post',
-                            url: '/proj/delProjInfo',
-                            contentType: 'application/json',
-                            dataType: 'json',
-                            data: JSON.stringify(item),
-                            beforeSend: function(xhr) {
-                                xhr.setRequestHeader($("#_csrf_header").val(), $("#_csrf").val());
-                            },
-                            success: function(data) {
-                            },
-                            error: function(request,status,error) {
-                                alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
-                            }
-                        });
-                        location.reload();
-                    }else {
-                        return false;
-                    }
                 }
             },
             mounted: function(){
