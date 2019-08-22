@@ -1,4 +1,4 @@
-package com.emfldlem.hotdeal.Common;
+package com.emfldlem.Common;
 
 import java.io.BufferedReader;
 import java.io.File;
