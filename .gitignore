@@ -29,3 +29,6 @@ mvnw.cmd
 /dist/
 /nbdist/
 /.nb-gradle/
+
+application.properties
+application-dev.properties
