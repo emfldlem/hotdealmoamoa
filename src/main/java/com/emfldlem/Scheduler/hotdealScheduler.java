@@ -9,7 +9,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -26,11 +25,11 @@ public class hotdealScheduler {
     @Autowired
     HotdealService hotdealService;
 
+    //todo 나중에 스케줄러만 따로 배치로 만들자
     //10분마다
-    @Scheduled(cron = "* */10  *  *  * *")
+    //@Scheduled(cron = "* */10  *  *  * *")
     //10초마다
     //@Scheduled(cron = "*/10 *  *  *  * *")
-
     void getRuriDataTEST() {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 스케줄 시작한다.");
 
@@ -68,7 +67,7 @@ public class hotdealScheduler {
         }
     }
 
-    @Scheduled(cron = "* */10  *  *  * *")
+    //@Scheduled(cron = "* */10  *  *  * *")
    // @Scheduled(cron = "*/15 *  *  *  * *")
     void getPPoData() {
         try {

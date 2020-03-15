@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,11 +32,18 @@ public class HotdealController {
     @Autowired
     HotdealService hotdealService;
 
-    @GetMapping("")
+    /*@GetMapping("")
     public String hotdealView() {
 
         return "hotdeal/list";
     }
+
+
+    @GetMapping("/newList")
+    public String new_hotdealView() {
+
+        return "hotdeal/hotdealList";
+    }*/
 
     @GetMapping("/initData")
     @ResponseBody
@@ -55,5 +63,32 @@ public class HotdealController {
         return rsltMap;
 
     }
+
+
+    //jsp 테스트
+    @RequestMapping("/hotdealList")
+    public ModelAndView mav() throws Exception{
+        ModelAndView model = new ModelAndView("hotdeal/hotdealList");
+
+
+        Map<String, Object> rsltMap = new HashMap<>();
+
+        List<HotdealEntity> ruriList = hotdealService.getListHotdeal("ruriweb");
+        List<HotdealEntity> ppoList = hotdealService.getListHotdeal("ppomppu");
+        List<HotdealEntity> allList = new ArrayList<>();
+        allList.addAll(ruriList);
+        allList.addAll(ppoList);
+
+        rsltMap.put("ruriList", ruriList);
+        rsltMap.put("ppoList", ppoList);
+        rsltMap.put("allList", allList);
+
+
+        model.addObject("allList", allList);
+
+        return model;
+    }
+
+
 
 }
