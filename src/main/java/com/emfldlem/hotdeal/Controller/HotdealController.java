@@ -37,8 +37,6 @@ public class HotdealController {
         return "hotdeal/list";
     }
 
-    //깃 커밋 테스트 진행 중!!!
-
     @GetMapping("/initData")
     @ResponseBody
     public Map<String, Object> initData() {

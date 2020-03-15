@@ -27,9 +27,9 @@ public class hotdealScheduler {
     HotdealService hotdealService;
 
     //10분마다
-    //@Scheduled(cron = "* */10  *  *  * *")
+    @Scheduled(cron = "* */10  *  *  * *")
     //10초마다
-    @Scheduled(cron = "*/10 *  *  *  * *")
+    //@Scheduled(cron = "*/10 *  *  *  * *")
 
     void getRuriDataTEST() {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 스케줄 시작한다.");
@@ -68,8 +68,8 @@ public class hotdealScheduler {
         }
     }
 
-    //@Scheduled(cron = "* */10  *  *  * *")
-    @Scheduled(cron = "*/15 *  *  *  * *")
+    @Scheduled(cron = "* */10  *  *  * *")
+   // @Scheduled(cron = "*/15 *  *  *  * *")
     void getPPoData() {
         try {
             String URL = ppomppuUrl;
